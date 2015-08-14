@@ -47,7 +47,6 @@ public class App
 {
   private static final String PROJECT_ID = "graphicjet-10305";
   private static final String CLIENTSECRETS_FILE = "client_secret.json";
-  private static final File CLIENTSECRETS_FILE_DIR = new File(System.getProperty("user.home"), CLIENTSECRETS_FILE);
 
   static GoogleClientSecrets clientSecrets = loadClientSecrets();
 
@@ -84,8 +83,9 @@ public class App
     listDatasets(bigquery, "publicdata");
 
     // Start a Query Job
-    //String querySql = "SELECT TOP(word, 50), COUNT(*) FROM publicdata:samples.shakespeare";
-    //row_number() over() as index
+    // String querySql = "SELECT TOP(word, 50), COUNT(*) FROM publicdata:samples.shakespeare";
+    // row_number() over() as index
+    // Query GitHub Public Data the most Active Contributers limit 10 rows
     String querySql = "SELECT COUNT(1) AS num_actions, actor FROM " +
       "publicdata:samples.github_timeline " + "GROUP BY " + "actor " + "ORDER BY " + "num_actions DESC " + "LIMIT 10";
     JobReference jobId = startQuery(bigquery, PROJECT_ID, querySql);
@@ -250,14 +250,15 @@ public class App
    */
   private static GoogleClientSecrets loadClientSecrets() {
     try {
-      InputStream inputStream = new FileInputStream(CLIENTSECRETS_FILE_DIR);
+      InputStream inputStream = App.class.getClassLoader().getResourceAsStream(CLIENTSECRETS_FILE);
+
       Reader reader =
         new InputStreamReader(inputStream);
       GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(new JacksonFactory(),
         reader);
       return clientSecrets;
     } catch (Exception e) {
-      System.out.println("Could not load client secrets file " + CLIENTSECRETS_FILE_DIR.toString());
+      System.out.println("Could not load client secrets file " + CLIENTSECRETS_FILE.toString());
       e.printStackTrace();
     }
     return null;
