@@ -31,12 +31,10 @@ import com.google.api.services.bigquery.model.TableRow;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.File;
 import java.io.Reader;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -46,7 +44,7 @@ import java.util.List;
 public class App
 {
   private static final String PROJECT_ID = "graphicjet-10305";
-  private static final String CLIENTSECRETS_FILE = "client_secret.json";
+  private static final String CLIENTSECRET_FILE = "client_secret.json";
 
   static GoogleClientSecrets clientSecrets = loadClientSecrets();
 
@@ -250,7 +248,7 @@ public class App
    */
   private static GoogleClientSecrets loadClientSecrets() {
     try {
-      InputStream inputStream = App.class.getClassLoader().getResourceAsStream(CLIENTSECRETS_FILE);
+      InputStream inputStream = App.class.getClassLoader().getResourceAsStream(CLIENTSECRET_FILE);
 
       Reader reader =
         new InputStreamReader(inputStream);
@@ -258,7 +256,7 @@ public class App
         reader);
       return clientSecrets;
     } catch (Exception e) {
-      System.out.println("Could not load client secrets file " + CLIENTSECRETS_FILE.toString());
+      System.out.println("Could not load client secrets file " + CLIENTSECRET_FILE);
       e.printStackTrace();
     }
     return null;
